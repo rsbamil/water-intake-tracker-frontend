@@ -11,6 +11,8 @@ import AdminDashboard from "../pages/admin/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
 import AdminRoute from "./AdminRoute";
 
+import UserLayout from "../layouts/UserLayout";
+
 const AppRoutes = () => {
   return (
     <Routes>
@@ -20,7 +22,11 @@ const AppRoutes = () => {
 
       {/* For Authenticated Users */}
       <Route element={<ProtectedRoute />}>
-        <Route path="/dashboard" element={<Dashboard />} />
+        {/* For User Application */}
+
+        <Route element={<UserLayout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
 
         {/* For Admin */}
 
