@@ -6,8 +6,8 @@ import {
   EyeOff,
   LockKeyhole,
   Mail,
+  UserRound,
   Sparkles,
-  ShieldCheck,
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -15,19 +15,24 @@ import { useAuth } from "../../context/AuthContext";
 import Button from "../../components/common/Button";
 import Input from "../../components/common/Input";
 
-const Login = () => {
+const Register = () => {
   const navigate = useNavigate();
 
-  const { login } = useAuth();
+  const { register } = useAuth();
 
   const [formData, setFormData] = useState({
+    name: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
 
   const [errors, setErrors] = useState({});
 
   const [showPassword, setShowPassword] =
+    useState(false);
+
+  const [showConfirmPassword, setShowConfirmPassword] =
     useState(false);
 
   const [loading, setLoading] = useState(false);
@@ -49,6 +54,13 @@ const Login = () => {
   const validate = () => {
     const newErrors = {};
 
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required";
+    } else if (formData.name.trim().length < 2) {
+      newErrors.name =
+        "Name must be at least 2 characters";
+    }
+
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
     } else if (
@@ -62,6 +74,20 @@ const Login = () => {
 
     if (!formData.password) {
       newErrors.password = "Password is required";
+    } else if (formData.password.length < 6) {
+      newErrors.password =
+        "Password must be at least 6 characters";
+    }
+
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword =
+        "Please confirm your password";
+    } else if (
+      formData.password !==
+      formData.confirmPassword
+    ) {
+      newErrors.confirmPassword =
+        "Passwords do not match";
     }
 
     setErrors(newErrors);
@@ -79,24 +105,21 @@ const Login = () => {
     try {
       setLoading(true);
 
-      const response = await login({
+      await register({
+        name: formData.name.trim(),
         email: formData.email.trim(),
         password: formData.password,
       });
 
-      toast.success("Welcome back!");
+      toast.success(
+        "Account created successfully!"
+      );
 
-      const loggedInUser = response.data.user;
-
-      if (loggedInUser.role === "admin") {
-        navigate("/admin");
-      } else {
-        navigate("/dashboard");
-      }
+      navigate("/dashboard");
     } catch (error) {
       const message =
         error.response?.data?.message ||
-        "Unable to login. Please try again.";
+        "Unable to create account.";
 
       toast.error(message);
     } finally {
@@ -106,13 +129,11 @@ const Login = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-slate-950">
-      {/* Background */}
-
       <div className="absolute -left-40 -top-40 h-96 w-96 rounded-full bg-sky-500/20 blur-3xl" />
 
       <div className="absolute -bottom-40 -right-40 h-96 w-96 rounded-full bg-cyan-400/10 blur-3xl" />
 
-      <div className="relative mx-auto flex min-h-screen w-full max-w-7xl items-center px-6 py-12">
+      <div className="relative mx-auto flex min-h-screen w-full max-w-7xl items-center px-6 py-10">
         <div className="grid w-full gap-12 lg:grid-cols-2 lg:items-center">
 
           {/* Branding */}
@@ -120,51 +141,40 @@ const Login = () => {
           <div className="hidden lg:block">
             <div className="mb-8 inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300 backdrop-blur">
               <Sparkles className="h-4 w-4 text-sky-400" />
-              Smart hydration tracking
+              Start your hydration journey
             </div>
 
             <h1 className="max-w-xl text-5xl font-bold leading-tight tracking-tight text-white">
-              Stay hydrated.
+              Small habits.
               <span className="block text-sky-400">
-                Feel your best.
+                Better days.
               </span>
             </h1>
 
             <p className="mt-6 max-w-lg text-lg leading-8 text-slate-400">
-              Keep track of every glass, monitor your
-              daily progress, and build better hydration
-              habits one sip at a time.
+              Create your account and turn hydration
+              into a simple daily habit.
             </p>
 
-            <div className="mt-10 grid max-w-xl grid-cols-2 gap-4">
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur">
-                <Droplets className="mb-4 h-6 w-6 text-sky-400" />
-
-                <p className="font-semibold text-white">
-                  Track every sip
-                </p>
-
-                <p className="mt-1 text-sm text-slate-400">
-                  Log your water intake in seconds.
-                </p>
+            <div className="mt-10 flex items-center gap-4">
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
+                <Droplets className="h-6 w-6 text-sky-400" />
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur">
-                <ShieldCheck className="mb-4 h-6 w-6 text-emerald-400" />
-
+              <div>
                 <p className="font-semibold text-white">
-                  Secure accounts
+                  Your hydration, your goal
                 </p>
 
                 <p className="mt-1 text-sm text-slate-400">
-                  Your account is protected with JWT
-                  authentication.
+                  Set a daily target and track your
+                  progress.
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Login */}
+          {/* Register */}
 
           <div className="mx-auto w-full max-w-md">
             <div className="rounded-3xl border border-white/10 bg-white p-8 shadow-2xl shadow-black/30 sm:p-10">
@@ -175,19 +185,34 @@ const Login = () => {
                 </div>
 
                 <h2 className="text-2xl font-bold text-slate-900">
-                  Welcome back
+                  Create your account
                 </h2>
 
                 <p className="mt-2 text-sm text-slate-500">
-                  Sign in to continue tracking your
-                  hydration.
+                  Start tracking your hydration today.
                 </p>
               </div>
 
               <form
                 onSubmit={handleSubmit}
-                className="space-y-5"
+                className="space-y-4"
               >
+                <div className="relative">
+                  <UserRound className="pointer-events-none absolute left-4 top-[38px] h-4 w-4 text-slate-400" />
+
+                  <Input
+                    id="name"
+                    name="name"
+                    label="Full name"
+                    placeholder="Rohit Kumar"
+                    value={formData.name}
+                    onChange={handleChange}
+                    error={errors.name}
+                    className="pl-11"
+                    autoComplete="name"
+                  />
+                </div>
+
                 <div className="relative">
                   <Mail className="pointer-events-none absolute left-4 top-[38px] h-4 w-4 text-slate-400" />
 
@@ -217,12 +242,12 @@ const Login = () => {
                         : "password"
                     }
                     label="Password"
-                    placeholder="Enter your password"
+                    placeholder="At least 6 characters"
                     value={formData.password}
                     onChange={handleChange}
                     error={errors.password}
                     className="pl-11 pr-11"
-                    autoComplete="current-password"
+                    autoComplete="new-password"
                   />
 
                   <button
@@ -232,9 +257,46 @@ const Login = () => {
                         (previous) => !previous
                       )
                     }
-                    className="absolute right-3 top-[34px] rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+                    className="absolute right-3 top-[34px] rounded-lg p-2 text-slate-400 hover:bg-slate-100"
                   >
                     {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
+
+                <div className="relative">
+                  <LockKeyhole className="pointer-events-none absolute left-4 top-[38px] h-4 w-4 text-slate-400" />
+
+                  <Input
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type={
+                      showConfirmPassword
+                        ? "text"
+                        : "password"
+                    }
+                    label="Confirm password"
+                    placeholder="Repeat your password"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    error={errors.confirmPassword}
+                    className="pl-11 pr-11"
+                    autoComplete="new-password"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setShowConfirmPassword(
+                        (previous) => !previous
+                      )
+                    }
+                    className="absolute right-3 top-[34px] rounded-lg p-2 text-slate-400 hover:bg-slate-100"
+                  >
+                    {showConfirmPassword ? (
                       <EyeOff className="h-4 w-4" />
                     ) : (
                       <Eye className="h-4 w-4" />
@@ -245,38 +307,23 @@ const Login = () => {
                 <Button
                   type="submit"
                   loading={loading}
-                  className="w-full py-3"
+                  className="mt-2 w-full py-3"
                 >
-                  Sign in
+                  Create account
                 </Button>
               </form>
 
-              <div className="my-7 flex items-center gap-3">
-                <div className="h-px flex-1 bg-slate-200" />
-
-                <span className="text-xs text-slate-400">
-                  OR
-                </span>
-
-                <div className="h-px flex-1 bg-slate-200" />
-              </div>
-
-              <p className="text-center text-sm text-slate-500">
-                Don't have an account?
+              <p className="mt-7 text-center text-sm text-slate-500">
+                Already have an account?
 
                 <Link
-                  to="/register"
+                  to="/login"
                   className="ml-1 font-semibold text-sky-500 hover:text-sky-600"
                 >
-                  Create one
+                  Sign in
                 </Link>
               </p>
             </div>
-
-            <p className="mt-6 text-center text-xs text-slate-500">
-              By continuing, you agree to our terms and
-              privacy practices.
-            </p>
           </div>
         </div>
       </div>
@@ -284,4 +331,4 @@ const Login = () => {
   );
 }
 
-export default Login;
+export default Register;
