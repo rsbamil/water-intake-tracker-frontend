@@ -40,6 +40,11 @@ const Navbar = () => {
       path: "/history",
       icon: History,
     },
+    {
+        label:"Profile",
+        path:"/profile",
+        icon:UserRound,
+    },
   ];
 
   return (

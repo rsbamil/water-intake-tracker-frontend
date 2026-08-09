@@ -6,12 +6,19 @@ import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 
 import Dashboard from "../pages/user/Dashboard";
+import History from "../pages/user/History";
+import Profile from "../pages/user/Profile";
+
+import AdminRoute from "./AdminRoute";
+import ProtectedRoute from "./ProtectedRoute";
+
 import AdminDashboard from "../pages/admin/Dashboard";
 
-import ProtectedRoute from "./ProtectedRoute";
-import AdminRoute from "./AdminRoute";
-
 import UserLayout from "../layouts/UserLayout";
+
+import HomeRedirect from "./HomeRedirect";
+
+
 
 const AppRoutes = () => {
   return (
@@ -25,7 +32,12 @@ const AppRoutes = () => {
         {/* For User Application */}
 
         <Route element={<UserLayout />}>
+
           <Route path="/dashboard" element={<Dashboard />} />
+
+          <Route path="/history" element={<History />} />
+
+          <Route path="/profile" element={<Profile/>}/>
         </Route>
 
         {/* For Admin */}
@@ -36,8 +48,7 @@ const AppRoutes = () => {
       </Route>
 
       {/* Fallback routes */}
-      <Route path="/" element={<Navigate to="/login" replace />} />
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      <Route path="/" element={<HomeRedirect/>}/>
     </Routes>
   );
 };
