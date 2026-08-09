@@ -6,15 +6,6 @@ The application also includes a dedicated **Admin Panel** for managing registere
 
 
 ---
-
-## 🚀 Live Application
-
-**Frontend:** Add your deployed frontend URL here
-
-**Backend API:** Add your deployed backend URL here
-
----
-
 ## ✨ Features
 
 ### 👤 User Features
@@ -781,7 +772,7 @@ The frontend communicates with the AquaTrack backend API.
 Backend repository:
 
 ```text
-<add-your-backend-github-repository-url>
+https://github.com/rsbamil/water-intake-tracker-backend
 ```
 
 ---
