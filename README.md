@@ -514,7 +514,7 @@ For production, replace the local backend URL with the deployed API URL.
 ### 1. Clone the repository
 
 ```bash
-git clone <your-frontend-repository-url>
+git clone https://github.com/rsbamil/water-intake-tracker-frontend
 ```
 
 ### 2. Navigate to the project
