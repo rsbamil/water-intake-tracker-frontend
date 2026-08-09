@@ -13,12 +13,14 @@ import AdminRoute from "./AdminRoute";
 import ProtectedRoute from "./ProtectedRoute";
 
 import AdminDashboard from "../pages/admin/Dashboard";
+import AdminUsers from "../pages/admin/Users"
+import UserDetails from "../pages/admin/UserDetails";
+
 
 import UserLayout from "../layouts/UserLayout";
+import AdminLayout from "../layouts/AdminLayout";
 
 import HomeRedirect from "./HomeRedirect";
-
-
 
 const AppRoutes = () => {
   return (
@@ -32,23 +34,29 @@ const AppRoutes = () => {
         {/* For User Application */}
 
         <Route element={<UserLayout />}>
-
           <Route path="/dashboard" element={<Dashboard />} />
 
           <Route path="/history" element={<History />} />
 
-          <Route path="/profile" element={<Profile/>}/>
+          <Route path="/profile" element={<Profile />} />
         </Route>
 
         {/* For Admin */}
 
         <Route element={<AdminRoute />}>
-          <Route path="/admin" element={<AdminDashboard />} />
+          <Route element={<AdminLayout />}>
+            <Route path="/admin" element={<AdminDashboard />} />
+
+            <Route path="/admin/users" element={<AdminUsers />} />
+          </Route>
+
+          <Route path="/admin/users/:id" element={<UserDetails />} />
         </Route>
+
       </Route>
 
       {/* Fallback routes */}
-      <Route path="/" element={<HomeRedirect/>}/>
+      <Route path="/" element={<HomeRedirect />} />
     </Routes>
   );
 };

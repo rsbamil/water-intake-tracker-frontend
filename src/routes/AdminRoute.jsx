@@ -1,7 +1,13 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, Route, Routes } from "react-router-dom";
 
 import { useAuth } from "../context/AuthContext";
 import LoadingSpinner from "../components/common/LoadingSpinner";
+
+import AdminLayout from "../layouts/AdminLayout";
+
+import AdminDashboard from "../pages/admin/Dashboard";
+import UserDetails from "../pages/admin/UserDetails";
+import AdminUsers from "../pages/admin/Users"
 
 const AdminRoute = () => {
   const {
@@ -35,7 +41,6 @@ const AdminRoute = () => {
       />
     );
   }
-
   return <Outlet />;
 }
 

@@ -1,6 +1,5 @@
 import api from "./api";
 
-
 const getMyProfile = async () => {
   const response = await api.get("/users/me");
 
