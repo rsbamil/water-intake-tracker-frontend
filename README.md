@@ -4,7 +4,6 @@ AquaTrack is a modern and responsive **water intake tracking application** built
 
 The application also includes a dedicated **Admin Panel** for managing registered users, viewing user hydration history, updating daily hydration goals, and deleting user accounts.
 
-> **Note:** Admin statistics/analytics are intentionally not implemented in this version.
 
 ---
 
